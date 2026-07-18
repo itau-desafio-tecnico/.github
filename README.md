@@ -16,12 +16,12 @@ Documentação central do projeto **desafio-itau**: escopo da solução, decisõ
 
 O desafio-itau é um sistema de **registro de ordens de serviço** ("ordens") vinculadas a um **solicitante** cadastrado previamente. É composto por dois microsserviços poliglotas que se comunicam de forma síncrona (validação) e assíncrona (evento de domínio), além da infraestrutura AWS que os sustenta:
 
-- **[`requester-service`](../requester-service/README.md)** (Java/Spring Boot): mantém o cadastro de solicitantes (documento, nome, e-mail, status ativo/inativo) e expõe um endpoint de validação consumido pelo `order-service`.
-- **[`order-service`](../order-service/README.md)** (Python/FastAPI): cria ordens de forma idempotente, validando o solicitante contra o `requester-service`, e publica de forma confiável o evento `OrderCreated` via outbox pattern + SNS/SQS.
-- **[`infrastructure`](../infrastructure/README.md)** (Terraform): provisiona todo o ambiente AWS — rede, ECS Fargate, RDS, SNS/SQS, ALB e a stack de observabilidade (OpenTelemetry, Prometheus, Jaeger, Grafana).
-- **[`terraform-backend`](../terraform-backend/README.md)** (Terraform): bootstrap do backend remoto de estado (bucket S3 + tabela DynamoDB de lock) usado pelo `infrastructure`.
+- **[`requester-service`](https://github.com/itau-desafio-tecnico/requester-service/blob/main/README.md)** (Java/Spring Boot): mantém o cadastro de solicitantes (documento, nome, e-mail, status ativo/inativo) e expõe um endpoint de validação consumido pelo `order-service`.
+- **[`order-service`](https://github.com/itau-desafio-tecnico/order-service/blob/main/README.md)** (Python/FastAPI): cria ordens de forma idempotente, validando o solicitante contra o `requester-service`, e publica de forma confiável o evento `OrderCreated` via outbox pattern + SNS/SQS.
+- **[`infrastructure`](https://github.com/itau-desafio-tecnico/infrastructure/blob/main/README.md)** (Terraform): provisiona todo o ambiente AWS — rede, ECS Fargate, RDS, SNS/SQS, ALB e a stack de observabilidade (OpenTelemetry, Prometheus, Jaeger, Grafana).
+- **[`terraform-backend`](https://github.com/itau-desafio-tecnico/terraform-backend/blob/main/README.md)** (Terraform): bootstrap do backend remoto de estado (bucket S3 + tabela DynamoDB de lock) usado pelo `infrastructure`.
 
-O rascunho original da solução (ver [draft](#documentação-complementar-adrs-e-draft)) previa também um frontend em Angular para cadastro de solicitantes e criação de ordens; esse frontend **não faz parte dos repositórios entregues** — o escopo implementado cobre as duas APIs backend, a infraestrutura e a observabilidade descritas acima.
+O rascunho original da solução (ver [draft](docs/draft.png)) previa também um frontend em Angular para cadastro de solicitantes e criação de ordens; esse frontend **não faz parte dos repositórios entregues** — o escopo implementado cobre as duas APIs backend, a infraestrutura e a observabilidade descritas acima.
 
 Garantias de negócio centrais do sistema (detalhadas nos ADRs):
 
@@ -34,10 +34,10 @@ Garantias de negócio centrais do sistema (detalhadas nos ADRs):
 
 | Repositório | Linguagem/Stack | Responsabilidade |
 |---|---|---|
-| [`order-service`](../order-service/README.md) | Python 3.12 / FastAPI | Criação idempotente de ordens, validação do solicitante, outbox + publicação SNS |
-| [`requester-service`](../requester-service/README.md) | Java 21 / Spring Boot 4 | Cadastro e validação de solicitantes |
-| [`infrastructure`](../infrastructure/README.md) | Terraform | Provisionamento da infraestrutura AWS de execução (rede, ECS, RDS, mensageria, observabilidade) |
-| [`terraform-backend`](../terraform-backend/README.md) | Terraform | Bootstrap do backend remoto de estado do Terraform |
+| [`order-service`](https://github.com/itau-desafio-tecnico/order-service/blob/main/README.md) | Python 3.12 / FastAPI | Criação idempotente de ordens, validação do solicitante, outbox + publicação SNS |
+| [`requester-service`](https://github.com/itau-desafio-tecnico/requester-service/blob/main/README.md) | Java 21 / Spring Boot 4 | Cadastro e validação de solicitantes |
+| [`infrastructure`](https://github.com/itau-desafio-tecnico/infrastructure/blob/main/README.md) | Terraform | Provisionamento da infraestrutura AWS de execução (rede, ECS, RDS, mensageria, observabilidade) |
+| [`terraform-backend`](https://github.com/itau-desafio-tecnico/terraform-backend/blob/main/README.md) | Terraform | Bootstrap do backend remoto de estado do Terraform |
 | `documentation` (este repositório) | Markdown | ADRs, draft da solução e diagramas |
 
 ## Documentação complementar (ADRs e draft)
@@ -47,7 +47,7 @@ As decisões arquiteturais estão registradas como Architecture Decision Records
 | ADR | Decisão |
 |---|---|
 | [0001](docs/0001-compute-ecs-fargate.md) | Compute: ECS Fargate (em vez de EKS ou Lambda) |
-| [0002](docs/0002-messaging-sns-sqs.md) | Mensageria: SNS + SQS (em vez de MSK/Kafka ou EventBridge) |
+| [0002](./docs/0002-messaging-sns-sqs.md) | Mensageria: SNS + SQS (em vez de MSK/Kafka ou EventBridge) |
 | [0003](docs/0003-idempotency-key-header.md) | Idempotência via header `Idempotency-Key` |
 | [0004](docs/0004-outbox-pattern.md) | Outbox pattern para publicação confiável de eventos |
 | [0005](docs/0005-observability-opentelemetry.md) | Observabilidade: OpenTelemetry + Grafana/Prometheus/Jaeger |
@@ -167,7 +167,7 @@ C4Component
 
 ## Diagrama de Infraestrutura
 
-Infraestrutura provisionada pelo repositório [`infrastructure`](../infrastructure/README.md) (ver módulos Terraform: `network`, `security`, `database`, `messaging`, `ecs`, `observability`).
+Infraestrutura provisionada pelo repositório [`infrastructure`](https://github.com/itau-desafio-tecnico/infrastructure/blob/main/README.md) (ver módulos Terraform: `network`, `security`, `database`, `messaging`, `ecs`, `observability`).
 
 ![Desenho de Arquitetura](docs/DI.png)
 
