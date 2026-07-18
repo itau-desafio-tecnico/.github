@@ -169,73 +169,7 @@ C4Component
 
 Infraestrutura provisionada pelo repositório [`infrastructure`](../infrastructure/README.md) (ver módulos Terraform: `network`, `security`, `database`, `messaging`, `ecs`, `observability`).
 
-```mermaid
-flowchart TB
-    cliente(["Cliente"])
-
-    subgraph AWS["AWS — sa-east-1"]
-        subgraph VPC["VPC (10.0.0.0/16)"]
-            subgraph Public["Sub-redes públicas"]
-                ALB["Application Load Balancer\n:80 rotas /py-order-service, /jv-requester-service\n:3000 Grafana · :16686 Jaeger"]
-                NAT["NAT Gateway"]
-                IGW["Internet Gateway"]
-            end
-
-            subgraph Private["Sub-redes privadas"]
-                subgraph ECS["ECS Cluster (Fargate) — service discovery internal.local"]
-                    OrderTask["order-service\n:8000"]
-                    RequesterTask["requester-service\n:8081"]
-                    Otel["otel-collector\n:4317/4318/9464"]
-                    Prom["prometheus\n:9090"]
-                    Jaeger["jaeger\n:16686"]
-                    Grafana["grafana\n:3000"]
-                end
-
-                OrderRDS[("RDS PostgreSQL\norder-db")]
-                RequesterRDS[("RDS PostgreSQL\nrequester-db")]
-            end
-        end
-
-        ECR["ECR\n(order-service, requester-service,\norder-service-migration)"]
-        SecretsManager["Secrets Manager\n(credenciais DB, senha Grafana)"]
-        CloudWatch["CloudWatch Logs"]
-        SNS["SNS: order-created"]
-        SQS["SQS: order-processing"]
-        DLQ["SQS DLQ"]
-    end
-
-    cliente -->|HTTPS| ALB
-    ALB --> OrderTask
-    ALB --> RequesterTask
-    ALB --> Grafana
-    ALB --> Jaeger
-
-    IGW --- Public
-    NAT --> Private
-
-    OrderTask -->|service discovery| RequesterTask
-    OrderTask --> OrderRDS
-    RequesterTask --> RequesterRDS
-    OrderTask -->|publish| SNS
-    SNS --> SQS
-    SQS -.-> DLQ
-
-    OrderTask -.OTLP.-> Otel
-    RequesterTask -.OTLP.-> Otel
-    Otel --> Prom
-    Otel --> Jaeger
-    Grafana --> Prom
-    Grafana --> Jaeger
-
-    OrderTask -.logs.-> CloudWatch
-    RequesterTask -.logs.-> CloudWatch
-
-    ECR -.imagem.-> OrderTask
-    ECR -.imagem.-> RequesterTask
-    SecretsManager -.credenciais.-> OrderTask
-    SecretsManager -.credenciais.-> RequesterTask
-    SecretsManager -.senha admin.-> Grafana
-```
+![Desenho de Arquitetura](docs/DI.png)
 
 ## Diagrama de Fluxo
 
