@@ -25,7 +25,7 @@ O rascunho original da solução (ver [draft](docs/draft.png)) previa também um
 
 Garantias de negócio centrais do sistema (detalhadas nos ADRs):
 
-- **Idempotência** na criação de ordens via header `Idempotency-Key` ([ADR 0003](docs/0003-idempotency-key-header.md)).
+- **Idempotência** na criação de ordens via header `Idempotency-Key` escopado por solicitante — a chave é única por `(idempotency_key, requester_id)`, não globalmente ([ADR 0003](docs/0003-idempotency-key-header.md)).
 - **Consistência entre persistência e mensageria** via transactional outbox ([ADR 0004](docs/0004-outbox-pattern.md)).
 - **Entrega confiável** do evento `OrderCreated` via SNS + SQS com DLQ ([ADR 0002](docs/0002-messaging-sns-sqs.md)).
 - **Observabilidade vendor-neutral** via OpenTelemetry, com métricas no Prometheus e tracing no Jaeger, visualizados no Grafana ([ADR 0005](docs/0005-observability-opentelemetry.md)).
@@ -48,7 +48,7 @@ As decisões arquiteturais estão registradas como Architecture Decision Records
 |---|---|
 | [0001](docs/0001-compute-ecs-fargate.md) | Compute: ECS Fargate (em vez de EKS ou Lambda) |
 | [0002](./docs/0002-messaging-sns-sqs.md) | Mensageria: SNS + SQS (em vez de MSK/Kafka ou EventBridge) |
-| [0003](docs/0003-idempotency-key-header.md) | Idempotência via header `Idempotency-Key` |
+| [0003](docs/0003-idempotency-key-header.md) | Idempotência via header `Idempotency-Key`, escopada por `(idempotency_key, requester_id)` |
 | [0004](docs/0004-outbox-pattern.md) | Outbox pattern para publicação confiável de eventos |
 | [0005](docs/0005-observability-opentelemetry.md) | Observabilidade: OpenTelemetry + Grafana/Prometheus/Jaeger |
 | [0006](docs/0006-liquibase-migrations.md) | Migração de schema com Liquibase nos dois serviços |
@@ -186,9 +186,9 @@ sequenceDiagram
     participant SQS as SQS (order-processing)
 
     Cliente->>Order: POST /orders\nHeader Idempotency-Key\n{requester_id, description}
-    Order->>DB: busca order por idempotency_key
+    Order->>DB: busca order por (idempotency_key, requester_id)
 
-    alt chave já existe
+    alt chave já existe para este requester_id
         DB-->>Order: order existente
         Order-->>Cliente: 201 Created (mesma order, sem novo evento)
     else nova requisição
