@@ -1,0 +1,164 @@
+{
+  "info": {
+    "_postman_id": "66478766-a0e1-4218-af5f-1434ce63300f",
+    "name": "itau-desafio-tecnico",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "41661506"
+  },
+  "item": [
+    {
+      "name": "Create - Requester",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"document\":\"\",\r\n    \"name\":\"\",\r\n    \"email\":\"@teste.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{host}}/jv-requester-service/requesters",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "jv-requester-service",
+            "requesters"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get - Requester by ID",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/jv-requester-service/requesters/{{requester_id}}",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "jv-requester-service",
+            "requesters",
+            "{{requester_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get - Validate Requester by ID",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/jv-requester-service/requesters/{{requester_id}}/validation",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "jv-requester-service",
+            "requesters",
+            "{{requester_id}}",
+            "validation"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create - Order",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Idempotency-Key",
+            "value": "teste-001",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"requester_id\":\"\",\r\n    \"description\":\"Troca de peca com defeito\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{host}}/py-order-service/orders",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "py-order-service",
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Actuator - Health",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/jv-requester-service/actuator/health",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "jv-requester-service",
+            "actuator",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "FastAPI - Health",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{host}}/py-order-service/health",
+          "host": [
+            "{{host}}"
+          ],
+          "path": [
+            "py-order-service",
+            "health"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
