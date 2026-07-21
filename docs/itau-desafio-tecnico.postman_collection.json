@@ -7,158 +7,330 @@
   },
   "item": [
     {
-      "name": "Create - Requester",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"document\":\"\",\r\n    \"name\":\"\",\r\n    \"email\":\"@teste.com\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+      "name": "requester-service",
+      "item": [
+        {
+          "name": "Create - Requester",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"document\":\"\",\r\n    \"name\":\"\",\r\n    \"email\":\"@teste.com\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/jv-requester-service/requesters",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "jv-requester-service",
+                "requesters"
+              ]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "{{host}}/jv-requester-service/requesters",
-          "host": [
-            "{{host}}"
-          ],
-          "path": [
-            "jv-requester-service",
-            "requesters"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get - Requester by ID",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{host}}/jv-requester-service/requesters/{{requester_id}}",
-          "host": [
-            "{{host}}"
-          ],
-          "path": [
-            "jv-requester-service",
-            "requesters",
-            "{{requester_id}}"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Get - Validate Requester by ID",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{host}}/jv-requester-service/requesters/{{requester_id}}/validation",
-          "host": [
-            "{{host}}"
-          ],
-          "path": [
-            "jv-requester-service",
-            "requesters",
-            "{{requester_id}}",
-            "validation"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Create - Order",
-      "request": {
-        "auth": {
-          "type": "noauth"
-        },
-        "method": "POST",
-        "header": [
-          {
-            "key": "Idempotency-Key",
-            "value": "teste-001",
-            "type": "text"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"requester_id\":\"\",\r\n    \"description\":\"Troca de peca com defeito\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
+        {
+          "name": "Requester by ID",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/jv-requester-service/requesters/{{requester_id}}",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "jv-requester-service",
+                "requesters",
+                "{{requester_id}}"
+              ]
             }
-          }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "{{host}}/py-order-service/orders",
-          "host": [
-            "{{host}}"
-          ],
-          "path": [
-            "py-order-service",
-            "orders"
-          ]
+        {
+          "name": "Validate Requester by ID",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/jv-requester-service/requesters/{{requester_id}}/validation",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "jv-requester-service",
+                "requesters",
+                "{{requester_id}}",
+                "validation"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/jv-requester-service/requesters?page=0&size=20",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "jv-requester-service",
+                "requesters"
+              ],
+              "query": [
+                {
+                  "key": "active",
+                  "value": "true",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actuator - Health",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/jv-requester-service/actuator/health",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "jv-requester-service",
+                "actuator",
+                "health"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     },
     {
-      "name": "Actuator - Health",
-      "request": {
-        "auth": {
-          "type": "noauth"
+      "name": "order-service",
+      "item": [
+        {
+          "name": "Create - Order",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Idempotency-Key",
+                "value": "teste-001",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"requester_id\":\"\",\r\n    \"description\":\"Troca de peca com defeito\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/py-order-service/orders",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "py-order-service",
+                "orders"
+              ]
+            }
+          },
+          "response": []
         },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{host}}/jv-requester-service/actuator/health",
-          "host": [
-            "{{host}}"
-          ],
-          "path": [
-            "jv-requester-service",
-            "actuator",
-            "health"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "FastAPI - Health",
-      "request": {
-        "auth": {
-          "type": "noauth"
+        {
+          "name": "Get all orders",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/py-order-service/orders?page=1&size=20",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "py-order-service",
+                "orders"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "CREATED",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
         },
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{host}}/py-order-service/health",
-          "host": [
-            "{{host}}"
-          ],
-          "path": [
-            "py-order-service",
-            "health"
-          ]
+        {
+          "name": "Get orders by requester id",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/py-order-service/orders/requester/{{requester_id}}?page=1&size=20",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "py-order-service",
+                "orders",
+                "requester",
+                "{{requester_id}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get outbox events",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/py-order-service/outbox-events?page=1&size=20",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "py-order-service",
+                "outbox-events"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "type": "text"
+                },
+                {
+                  "key": "status",
+                  "value": "PENDING",
+                  "description": "PENDING, PROCESSING, PUBLISHED, FAILED",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "created_from",
+                  "value": "2026-07-20",
+                  "type": "text",
+                  "disabled": true
+                },
+                {
+                  "key": "created_to",
+                  "value": "2026-07-21",
+                  "type": "text",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FastAPI - Health",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/py-order-service/health",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "py-order-service",
+                "health"
+              ]
+            }
+          },
+          "response": []
         }
-      },
-      "response": []
+      ]
     }
   ]
 }
